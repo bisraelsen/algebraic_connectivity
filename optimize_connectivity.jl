@@ -1,8 +1,7 @@
 include("random_rewire.jl")
 include("utilities.jl")
 include("algConnectivity.jl")
-
-using PyPlot
+include("arg_config.jl")
 
 function Paccept(c,c_prime,T,its)
     if c_prime >= c
@@ -12,20 +11,28 @@ function Paccept(c,c_prime,T,its)
     end
 end
 
-n = 100
-e = 4*n
+args = parse_commandline()
+n = args["vertices"]
+e = args["edges"]
 
 g = simple_NE_graph(n,e)
-Graphs.plot(g)
-# g = erdos_renyi_graph(g,n,b,has_self_loops=false)
-# plot_to_file(g,"original")
-write_to_file(g,"original")
+
+if !args["no_graph_dot"]
+    write_to_file(g,args["out_folder"],args["init_fname"])
+end
+if args["plot_graphs"]
+    plot(g)
+end
+if args["save_graphs_plot"]
+    plot_to_file(g,args["out_folder"],args["init_fname"])
+end
+
 current_state = deepcopy(g)
-tot_its = 50000
-edge_change_prob = 0.75
-T = 1
-c = AlgConnectivity(laplacian_matrix_sparse(current_state))
-# c = AlgConnectivity(laplacian_matrix(current_state))
+tot_its = args["iterations"]
+edge_change_prob = args["edge_rewire"]
+T = args["temperature"]
+# c = AlgConnectivity(laplacian_matrix_sparse(current_state))
+c = AlgConnectivity(laplacian_matrix(current_state))
 @printf("Original connectivity: %.3f\n",c)
 c_hist = zeros(tot_its,1)
 for i = 1:tot_its
@@ -57,9 +64,19 @@ for i = 1:tot_its
     end
 end
 @printf("Final connectivity: %.3f\n",c)
-# plot_to_file(current_state,@sprintf("rewire%d",1))
-write_to_file(current_state,"opt")
-Graphs.plot(current_state)
+if !args["no_graph_dot"]
+    write_to_file(current_state,args["out_folder"],args["final_fname"])
+end
+if args["plot_graphs"]
+    plot(current_state)
+end
+if args["save_graphs_plot"]
+    plot_to_file(current_state,args["out_folder"],args["final_fname"])
+end
 
-println(size(c_hist))
-PyPlot.plot(collect(1:tot_its),c_hist)
+if !args["no_chist"]
+    using PyPlot
+    PyPlot.plot(collect(1:tot_its),c_hist)
+    fname = joinpath(args["out_folder"],args["c_hist_fname"])
+    savefig(fname)
+end

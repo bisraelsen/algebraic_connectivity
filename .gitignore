@@ -1,2 +1,4 @@
 # Ignore the outputs files
 *.dot
+*.pdf
+*.svg

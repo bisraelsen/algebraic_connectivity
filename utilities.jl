@@ -1,12 +1,13 @@
 using Graphs
 
-function plot_to_file(g::GenericGraph,gname::ASCIIString)
-    write_to_file(g,gname)
-    run(`neato -Tpng $gname".dot" -o $gname".png"`)
+function plot_to_file(g::GenericGraph,fname::ASCIIString,gname::ASCIIString)
+    write_to_file(g,fname,gname)
+    pname = joinpath(fname,gname)
+    run(`neato -Tpng $pname".dot" -o $pname".png"`)
 end
 
-function write_to_file(g::GenericGraph,gname::ASCIIString)
-    f = open(@sprintf("%s.dot",gname),"w")
+function write_to_file(g::GenericGraph,fname::ASCIIString,gname::ASCIIString)
+    f = open(@sprintf("%s.dot",joinpath(fname,gname)),"w")
     write(f,to_dot(g))
     close(f)
 end
