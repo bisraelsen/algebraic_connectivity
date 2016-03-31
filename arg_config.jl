@@ -48,12 +48,15 @@ function parse_commandline()
         "--simple_graph"
             help = "use SimpleGraph structure"
             action = :store_true
+        "--sparse_rep"
+            help = "Use sparse representation"
+            action = :store_true
 
         ## Output config
         "--out_folder"
-            help = "name of the folder in which to store output"
+            help = "name of the folder in which to store output. Will default to res_yyyy_mm_dd_HH_MM:SS"
             arg_type = ASCIIString
-            default = "results"
+            default = ""
         "--init_fname"
             help = "name for the .dot or .png of the original graph to be saved as"
             arg_type = ASCIIString

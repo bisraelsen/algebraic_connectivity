@@ -21,13 +21,17 @@ function AlgConnectivity(L::Array{Int64,2},vecs=false)
     results = AlgConnectivity(Ls,vecs=vecs)
     return results
 end
-function AlgConnectivity(g::SimpleGraphs.SimpleGraph)
+function AlgConnectivity(g::SimpleGraphs.SimpleGraph,sparse::Bool)
     L = laplace(g)
     results = AlgConnectivity(L)
     return results
 end
-function AlgConnectivity(g::GenericGraph)
-    L = laplacian_matrix(g)
+function AlgConnectivity(g::GenericGraph,sparse::Bool)
+    if sparse
+        L = laplacian_matrix_sparse(g)
+    else
+        L = laplacian_matrix(g)
+    end
     results = AlgConnectivity(L)
     return results
 end
