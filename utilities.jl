@@ -8,6 +8,9 @@ function plot_to_file(g::GenericGraph,fname::ASCIIString,gname::ASCIIString)
 end
 
 function write_to_file(g::GenericGraph,fname::ASCIIString,gname::ASCIIString)
+    if !ispath(fname)
+        mkdir(fname)
+    end
     f = open(@sprintf("%s.dot",joinpath(fname,gname)),"w")
     write(f,to_dot(g))
     close(f)
