@@ -16,6 +16,21 @@ function AlgConnectivity(L::Array{Float64,2},vecs=false)
     results = AlgConnectivity(Ls,vecs=vecs)
     return results
 end
+function AlgConnectivity(L::Array{Int64,2},vecs=false)
+    Ls = Symmetric(float(L))
+    results = AlgConnectivity(Ls,vecs=vecs)
+    return results
+end
+function AlgConnectivity(g::SimpleGraphs.SimpleGraph)
+    L = laplace(g)
+    results = AlgConnectivity(L)
+    return results
+end
+function AlgConnectivity(g::GenericGraph)
+    L = laplacian_matrix(g)
+    results = AlgConnectivity(L)
+    return results
+end
 
 function AlgConnectivity(L::SparseMatrixCSC;vecs=false)
     # Calculates the algebraic connectivity of graph with laplacian L

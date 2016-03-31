@@ -45,23 +45,26 @@ function parse_commandline()
             help = "Annealing temperature"
             arg_type = Float64
             default = 1.0
+        "--simple_graph"
+            help = "use SimpleGraph structure"
+            action = :store_true
 
         ## Output config
         "--out_folder"
             help = "name of the folder in which to store output"
-            arg_type = AbstractString
+            arg_type = ASCIIString
             default = "results"
         "--init_fname"
             help = "name for the .dot or .png of the original graph to be saved as"
-            arg_type = AbstractString
+            arg_type = ASCIIString
             default = "initial"
         "--final_fname"
             help = "name for the .dot or .png of the final graph to be saved as"
-            arg_type = AbstractString
+            arg_type = ASCIIString
             default = "final"
         "--c_hist_fname"
             help = "file name and type for the connectivity history to be output as ex. 'c_hist.pdf' or 'c_hist.svg'"
-            arg_type = AbstractString
+            arg_type = ASCIIString
             default = "c_hist.pdf"
         "--no_chist"
             help = "Don't save connectivity plot to history"

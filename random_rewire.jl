@@ -1,4 +1,5 @@
 using Graphs
+using SimpleGraphs
 
 function swap_edge!(g::GenericGraph,e_o::Edge,newSrc::Int,newDest::Int)
     # swap edge
@@ -31,7 +32,6 @@ function swap_edge!(g::GenericGraph,e_o::Edge,newSrc::Int,newDest::Int)
     # add reverse edge
     push!(g.finclist[newDest], rev_edge)
 end
-
 function rewire(g::GenericGraph,p::Float64;self_loops=false,parallel_edges=false,keep_vertex_source=false)
     # Inputs:
     #   g: graph of type GenericGraph
@@ -56,7 +56,7 @@ function rewire(g::GenericGraph,p::Float64;self_loops=false,parallel_edges=false
             end
 
             if !parallel_edges
-                neighbors = collect(out_neighbors(source_v,g))
+                neighbors = collect(Graphs.out_neighbors(source_v,g))
             end
             # rewire the edge
             ok = false
@@ -97,6 +97,34 @@ function rewire(g::GenericGraph,p::Float64;self_loops=false,parallel_edges=false
             # don't rewire this edge, move on
             continue
         end
+    end
+    return g
+end
+
+function rewire(g::SimpleGraphs.SimpleGraph,p::Float64)
+    #Sould be cool to add this at some point
+    max_its = 1000
+    for e in elist(g)
+        s = e[1]
+        t = e[2]
+        if rand() < p
+            vl = vlist(g)
+            source_v = s
+            dest_v = t
+            its = 0
+            while (has(g,source_v,dest_v) || source_v == dest_v) && its < max_its
+                its += 1
+                source_v = rand(vl)
+                dest_v = rand(vl)
+            end
+            if its == max_its
+                println("too many tries")
+            end
+        else
+            continue
+        end
+        delete!(g,s,t)
+        add!(g,source_v,dest_v)
     end
     return g
 end
