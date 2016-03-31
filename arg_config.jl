@@ -65,12 +65,8 @@ function parse_commandline()
             help = "name for the .dot or .png of the final graph to be saved as"
             arg_type = ASCIIString
             default = "final"
-        "--c_hist_fname"
-            help = "file name and type for the connectivity history to be output as ex. 'c_hist.pdf' or 'c_hist.svg'"
-            arg_type = ASCIIString
-            default = "c_hist.pdf"
-        "--no_chist"
-            help = "Don't save connectivity plot to history"
+        "--no_figs"
+            help = "Should summary figures be produced"
             action = :store_true
         "--plot_graphs"
             help = "Produce GraphViz plots of graphs"
