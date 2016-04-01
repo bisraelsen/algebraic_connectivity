@@ -5,6 +5,7 @@ include("arg_config.jl")
 include("plotting.jl")
 using PyPlot
 using ProgressMeter
+import JSON
 
 function Paccept(c,c_prime,T,its,maxits)
     if c_prime >= c
@@ -47,6 +48,7 @@ function main()
     if !args["no_figs"]
         plot_deg_hist(g,out_fldr,"d_hist_initial")
     end
+    save_json(args,out_fldr,"args.txt")
     current_state = deepcopy(g)
     tot_its = args["iterations"]
     edge_change_prob = args["edge_rewire"]

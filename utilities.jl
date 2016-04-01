@@ -1,6 +1,13 @@
 using Graphs
 using SimpleGraphs
 
+function save_json(arg,fname::ASCIIString,gname::ASCIIString)
+    d = JSON.json(arg)
+    f = open(@sprintf("%s",joinpath(fname,gname)),"w")
+    JSON.print(f,d)
+    close(f)
+end
+
 function plot_to_file(g::GenericGraph,fname::ASCIIString,gname::ASCIIString)
     write_to_file(g,fname,gname)
     pname = joinpath(fname,gname)
