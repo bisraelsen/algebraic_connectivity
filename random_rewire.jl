@@ -101,8 +101,7 @@ function rewire(g::GenericGraph,p::Float64;self_loops=false,parallel_edges=false
     return g
 end
 
-function rewire(g::SimpleGraphs.SimpleGraph,p::Float64)
-    #Sould be cool to add this at some point
+function rewire_old(g::SimpleGraphs.SimpleGraph,p::Float64)
     max_its = 1000
     for e in elist(g)
         s = e[1]
@@ -125,6 +124,33 @@ function rewire(g::SimpleGraphs.SimpleGraph,p::Float64)
         end
         delete!(g,s,t)
         add!(g,source_v,dest_v)
+    end
+    return g
+end
+
+function rewire(g::SimpleGraphs.SimpleGraph,p::Float64)
+    max_its = 1000
+    e_lst = elist(g)
+    for i in 1:NE(g)
+        if rand() < p
+            s = e_lst[i][1]
+            t = e_lst[i][2]
+            cand = i
+            while cand == i
+                cand = rand(1:NE(g))
+            end
+            c_s = cand[1]
+            c_t = cand[2]
+
+            if c_s != s && c_t != t
+                delete!(g,s,t)
+                delete!(g,c_s,c_t)
+                add!(g,s,c_s)
+                add!(g,t,c_t)
+            end
+        else
+            continue
+        end
     end
     return g
 end
