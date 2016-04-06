@@ -7,6 +7,16 @@ function plot_deg_hist(g::GenericGraph, out_fldr::ASCIIString,fname::ASCIIString
     plt_deg_hist(deglst,out_fldr,fname)
 end
 
+function plot_deg_hist(g::SimpleGraphs.SimpleGraph, out_fldr::ASCIIString,fname::ASCIIString)
+    deglst = zeros(NV(g))
+    v_lst = vlist(g)
+    for i=1:NV(g)
+        deglst[i] = deg(g,v_lst[i])
+    end
+    # deglst = deg_hist(g)
+    plt_deg_hist(deglst,out_fldr,fname)
+end
+
 function plot_deg_list(g::SimpleGraphs.SimpleGraph, out_fldr::ASCIIString,fname::ASCIIString)
     # degree histogram
     deglst = deg(g)

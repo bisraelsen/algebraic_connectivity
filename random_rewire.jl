@@ -102,7 +102,7 @@ function rewire(g::GenericGraph,p::Float64;self_loops=false,parallel_edges=false
 end
 
 function rewire_old(g::SimpleGraphs.SimpleGraph,p::Float64)
-    max_its = 1000
+    max_its = 10
     for e in elist(g)
         s = e[1]
         t = e[2]
@@ -129,27 +129,36 @@ function rewire_old(g::SimpleGraphs.SimpleGraph,p::Float64)
 end
 
 function rewire(g::SimpleGraphs.SimpleGraph,p::Float64)
-    max_its = 1000
     e_lst = elist(g)
-    for i in 1:NE(g)
-        if rand() < p
-            s = e_lst[i][1]
-            t = e_lst[i][2]
-            cand = i
-            while cand == i
-                cand = rand(1:NE(g))
+    # choose which will be rewired
+    num_e = NE(g)
+    num_swaps = round(Int,p*num_e)
+    if isodd(num_swaps)
+        # make it even
+        num_swaps -= 1
+    end
+    rewire_list = randperm(num_e)[1:num_swaps]
+    # take edges two at a time and rewire sources to source and targets to targets
+    for i = 1:2:num_swaps
+        s1 = e_lst[rewire_list[i]][1]
+        t1 = e_lst[rewire_list[i]][2]
+        s2 = e_lst[rewire_list[i+1]][1]
+        t2 = e_lst[rewire_list[i+1]][2]
+        delete!(g,s1,t1)
+        delete!(g,s2,t2)
+        add!(g,s1,s2)
+        add!(g,t1,t2)
+    end
+    if NE(g) != num_e
+        e_diff = num_e - NE(g)
+        for i = 1:e_diff
+            ns = 1
+            nt = 1
+            while ns == nt || has(g,ns,nt)
+                ns = rand(1:NV(g))
+                nt = rand(1:NV(g))
             end
-            c_s = cand[1]
-            c_t = cand[2]
-
-            if c_s != s && c_t != t
-                delete!(g,s,t)
-                delete!(g,c_s,c_t)
-                add!(g,s,c_s)
-                add!(g,t,c_t)
-            end
-        else
-            continue
+            add!(g,ns,nt)
         end
     end
     return g

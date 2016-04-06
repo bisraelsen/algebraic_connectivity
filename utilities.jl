@@ -39,6 +39,17 @@ function simple_NE_sgraph(n::Int,e::Int)
         pts = rand(collect(1:n),2)
         add!(g,pts[1],pts[2])
     end
+    if NE(g) != e
+        # add in missing edges
+        for i = 1:(e-NE(g))
+            ns = nt = 1
+            while ns == nt || has(g,ns,nt)
+                ns = rand(1:NV(g))
+                nt = rand(1:NV(g))
+            end
+            add!(g,ns,nt)
+        end
+    end
     return g
 end
 
