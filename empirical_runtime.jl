@@ -2,10 +2,15 @@ include("SA.jl")
 import JSON
 
 
-n_lst = collect(100:100:1000)
+n_lst = collect(100:100:200)
 e_lst = 3*n_lst
 reps = 5
 t = zeros(length(n_lst),reps)
+
+dt = replace(string(now()),"T","_")
+dt = replace(dt,":","_")
+dt = replace(dt,"-","_")
+fname = string("emp_results_",dt)
 
 # junk run to get everyhting in memory, not sure how to fix this yet.
 SA.optimize()
@@ -25,13 +30,12 @@ for i = 1:length(n_lst)
         t[i,j] = SA.optimize(ARGS)
     end
 end
-SA.save_json(t,"","empirical_results.json")
+SA.save_json(t,"",string(fname,".json"))
 PyPlot.clf()
 PyPlot.plot(n_lst,t,"b*")
 PyPlot.title("Connectivity History")
 PyPlot.xlabel("Iteration")
 PyPlot.ylabel("Algebraic Connectivity")
-fname = joinpath("emp_runtime")
 fname = string(fname,".pdf")
 PyPlot.savefig(fname)
 # println(t)
