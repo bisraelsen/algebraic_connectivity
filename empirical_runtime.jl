@@ -2,7 +2,7 @@ include("SA.jl")
 import JSON
 
 
-n_lst = collect(100:100:200)
+n_lst = collect(100:50:2000)
 e_lst = 3*n_lst
 reps = 5
 t = zeros(length(n_lst),reps)
