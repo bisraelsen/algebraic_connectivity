@@ -16,7 +16,7 @@ function leq1gt0(x)
     end
 end
 
-function parse_commandline()
+function parse_commandline(a="")
     s = ArgParseSettings()
 
     @add_arg_table s begin
@@ -77,7 +77,14 @@ function parse_commandline()
         "--no_graph_dot"
             help = "Don't write graphs to .dot file"
             action = :store_true
+        "--no_console_output"
+            help = "not print ot console"
+            action = :store_true
     end
 
-    return parse_args(s)
+    if isequal(a,"")
+        return parse_args(s)
+    else
+        return parse_args(a,s)
+    end
 end
