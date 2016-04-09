@@ -1,7 +1,7 @@
 include("SA.jl")
 using HDF5
 
-n_lst = collect(1500:100:2000)
+n_lst = collect(100:50:2000)
 e_lst = 3*n_lst
 reps = 5
 t = zeros(length(n_lst),reps)
