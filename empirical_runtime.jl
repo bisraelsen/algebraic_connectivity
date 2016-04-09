@@ -1,8 +1,7 @@
 include("SA.jl")
-import JSON
+using HDF5
 
-
-n_lst = collect(100:50:2000)
+n_lst = collect(1500:100:2000)
 e_lst = 3*n_lst
 reps = 5
 t = zeros(length(n_lst),reps)
@@ -14,7 +13,6 @@ fname = string("emp_results_",dt)
 
 # junk run to get everyhting in memory, not sure how to fix this yet.
 SA.optimize()
-
 # now start the real testing
 for i = 1:length(n_lst)
     ARGS = Array(UTF8String,7)
@@ -29,8 +27,10 @@ for i = 1:length(n_lst)
         @printf("Run %d trial %d, n=%d, e=%d\n",i,j,n_lst[i],e_lst[i])
         t[i,j] = SA.optimize(ARGS)
     end
+    h5open(string(fname,".h5"), "w") do file
+    write(file, "t", t)  # alternatively, say "@write file A"
+    end
 end
-SA.save_json(t,"",string(fname,".json"))
 PyPlot.clf()
 PyPlot.plot(n_lst,t,"b*")
 PyPlot.title("Connectivity History")
