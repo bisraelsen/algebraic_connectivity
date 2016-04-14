@@ -1,9 +1,10 @@
 include("SA.jl")
 using HDF5
 
-n_lst = collect(100:50:2000)
+# n_lst = collect(8000:100:15000)
+n_lst = collect(10000)
 e_lst = 3*n_lst
-reps = 5
+reps = 1
 t = zeros(length(n_lst),reps)
 
 dt = replace(string(now()),"T","_")
@@ -19,7 +20,7 @@ for i = 1:length(n_lst)
     ARGS[1] = "--simple_graph"
     ARGS[2] = @sprintf("-n=%d",n_lst[i])
     ARGS[3] = @sprintf("-e=%d",e_lst[i])
-    ARGS[4] = "-i=100"
+    ARGS[4] = "-i=500"
     ARGS[5] = "-r=0.5"
     ARGS[6] = "--out_folder=empirical_results"
     ARGS[7] = "--no_console_output"

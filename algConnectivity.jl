@@ -1,3 +1,6 @@
+using Graphs
+using SimpleGraphs
+
 function AlgConnectivity(L::Symmetric;vecs=false)
     # Calculates the algebraic connectivity of graph with laplacian L
     # Input: L a symmetric laplacian matrix

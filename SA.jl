@@ -60,6 +60,9 @@ function optimize(ARGS="")
     if !args["no_console_output"]
         @printf("Original connectivity: %.3f\n",c)
     end
+    if !args["no_figs"]
+        plot_deg_hist(g,out_fldr,"d_hist_initial",c)
+    end
     c_hist = zeros(tot_its,1)
 
     p = Progress(tot_its, 30, "Progress: ", 50)
@@ -96,7 +99,7 @@ function optimize(ARGS="")
     if !args["no_figs"]
         plot_c_hist(c_hist,out_fldr,"c_hist")
 
-        plot_deg_hist(current_state,out_fldr,"d_hist_final")
+        plot_deg_hist(current_state,out_fldr,"d_hist_final",c)
     end
     return t
 end
