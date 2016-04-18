@@ -33,7 +33,6 @@ function optimize(ARGS="")
     end
 
     if args["simple_graph"]
-        out_fldr = string(out_fldr, "_sg")
         g = simple_NE_sgraph(n,e)
     else
         g = simple_NE_graph(n,e)
@@ -47,9 +46,6 @@ function optimize(ARGS="")
     end
     if args["save_graphs_plot"]
         plot_to_file(g,out_fldr,args["init_fname"])
-    end
-    if !args["no_figs"]
-        plot_deg_hist(g,out_fldr,"d_hist_initial")
     end
     save_json(args,out_fldr,"args.txt")
     current_state = deepcopy(g)
