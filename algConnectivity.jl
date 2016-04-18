@@ -7,7 +7,7 @@ function AlgConnectivity(L::Symmetric;vecs=false)
     # Output: value of algebraic connectivity λ_2
     e_vals = eigfact(L,2:2)
     λ = e_vals.values[1]
-    ν = e_vals.vectors[1]
+    ν = e_vals.vectors
     if vecs
         return λ, ν
     else
@@ -24,18 +24,18 @@ function AlgConnectivity(L::Array{Int64,2},vecs=false)
     results = AlgConnectivity(Ls,vecs=vecs)
     return results
 end
-function AlgConnectivity(g::SimpleGraphs.SimpleGraph,sparse::Bool)
+function AlgConnectivity(g::SimpleGraphs.SimpleGraph,sparse::Bool;vecs=false)
     L = laplace(g)
-    results = AlgConnectivity(L)
+    results = AlgConnectivity(L,vecs)
     return results
 end
-function AlgConnectivity(g::GenericGraph,sparse::Bool)
+function AlgConnectivity(g::GenericGraph,sparse::Bool;vecs=false)
     if sparse
         L = laplacian_matrix_sparse(g)
     else
         L = laplacian_matrix(g)
     end
-    results = AlgConnectivity(L)
+    results = AlgConnectivity(L,vecs)
     return results
 end
 

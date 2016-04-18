@@ -58,3 +58,18 @@ function plot_c_hist(c_hist::Array{},out_fldr::ASCIIString,fname::ASCIIString)
     savefig(fname)
     clf()
 end
+
+function plot_c_box(c_vals::Array{},n::Int,c_opt::Float64,out_fldr::ASCIIString,fname::ASCIIString)
+    # connectivity distribution vs. optimal
+    PyPlot.clf()
+    boxplot(c_vals)
+    PyPlot.boxplot(c_vals)
+    PyPlot.axhline(c_opt,color="r",ls="dotted")
+    title("Optimization Performance")
+    # xlabel("n")
+    xticks([1,2],["Opt","Random"])
+    ylabel("Algebraic Connectivity")
+    fname = joinpath(out_fldr,fname)
+    fname = string(fname,".pdf")
+    savefig(fname)
+end
